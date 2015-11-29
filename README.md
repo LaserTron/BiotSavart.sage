@@ -1,5 +1,5 @@
 # BiotSavart.sage
-A [SageMath](http://www.sagemath.org/) module that uses the Biot-Savard law to numerically computes magnetic fields generated from a current passing through a wire given as an arbitrary parametrized curve in 3-space. The curves are specified in SageMath and the numerical calculations are done with [numpy](http://www.numpy.org/) for low overhead high speed computation.
+A [SageMath](http://www.sagemath.org/) module that uses the Biot-Savard law to numerically computes magnetic fields generated from a current passing through a wire given as an arbitrary parametrized curve in 3-space. The curves are specified in SageMath and the numerical calculations are done with [numpy](http://www.numpy.org/) for low overhead high speed computation. All software is free open source.
 
 ![ScreenShot](Solenoid.png?raw=true "The curve doesn't have to be a solenoid :-)")
  
