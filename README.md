@@ -4,7 +4,7 @@ A [SageMath](http://www.sagemath.org/) module that uses the Biot-Savard law to n
 ![ScreenShot](Solenoid.png?raw=true "The curve doesn't have to be a solenoid :-)")
  
 # Contributing:
-Please give me a hand if you want to. This is a great opportunity to learn some Python. Also if you have some interesting curves please share them with me!
+Please give me a hand if you want to. This is a great opportunity to learn some Python. Also if you have some interesting curves please share them with me l453r7r0n@gmail.com.
 
 # Usage
 It's pretty straightforward, the code should be self-expanatory. A complete newbie could:
