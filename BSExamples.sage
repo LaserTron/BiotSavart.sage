@@ -34,3 +34,10 @@ solGr = sol.toGraphicsObject([0,5*tau])
 totFF = superpose(solFF,cFF)#put loop and sol together
 totmf = plotMagField(totFF,[-2,7],[-2,2],[-2,2],unit=True)#,drawArrows=False)
 show(solGr+circleGr+totmf)
+
+print "Not a solenoid!"
+ns = threeDeeCurve(sqrt(81-t)/9*cos(t),sqrt(81-t)/9*sin(t),t/(4*tau))
+nsFF = ns.makeFieldFunction([0,12*tau],samples=2000)
+nsGR = ns.toGraphicsObject([0,12*tau],samples=500)
+nsmf = plotMagField(nsFF,[-5,5],[-5,5],[-2,5],unit=True,drawArrows=False)
+show(nsmf+nsGR)
