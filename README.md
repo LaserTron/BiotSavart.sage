@@ -1,5 +1,5 @@
 # BiotSavart.sage
-A [SageMath](http://www.sagemath.org/) module that uses the Biot-Savard law to numerically computes magnetic fields generated from a current passing through a wire given as a parametrized curve. The numerical calculations are done with [numpy](http://www.numpy.org/) for low overhead high speed computation.
+A [SageMath](http://www.sagemath.org/) module that uses the Biot-Savard law to numerically computes magnetic fields created from a current passing through a wire given as a parametrized curve. The numerical calculations are done with [numpy](http://www.numpy.org/) for low overhead high speed computation.
 
 # Contributing:
 Please give me a hand if you want to. This is a great opportunity to learn some Python. Also if you have some interesting curves please share them with me!
@@ -12,8 +12,13 @@ It's pretty straightforward, the code should be self-expanatory. A complete newb
  4. Copy the code of `BSExamples.sage` into another cell, evaluate, and experiment.
 Personally though, I prefer using the command line interpreter.
 
+#Features:
+* Input wires as tripes of functions describing parametrized curves, Sage does the calculus. Try any shape you can think of.
+* Plot magnetic fields and field lines.
+* You can superpose magnetic fields created from multiple components.
+* As precise as you want it to be.
+
 # Projected features:
-* The ability to support piecewise-defined curves.
 * Computation of coupling constants.
 * Better unit support.
 * Error estimation.
