@@ -10,8 +10,8 @@ current going through a wire described by a parametrized curve in
 import numpy as np
 var("t")
 
-def magFieldBundle(initial,deltax,deltay,deltaz,delta,TB):
-    """Computes the magnetic field from a wire tangent bundle TB, in a
+def magFieldBundle(initial,deltax,deltay,deltaz,delta,FF):
+    """Computes the magnetic field from a wire Field Function FF, in a
     parallepiped whith one corner initial, and width, depth, height
     given by deltax, deltay, deltaz. delta gives the sudivision
     size.
@@ -23,13 +23,13 @@ def magFieldBundle(initial,deltax,deltay,deltaz,delta,TB):
     output = []
     c = 0
     for p in pts:
-        output.append(magAtPoint(TB,p))
+        output.append(FF(p))
         c = c+1
         if c%50 == 0:
             print c        
     return [pts,output]
 
-def unitFieldBundle(initial,deltax,deltay,deltaz,delta,TB):
+def unitFieldBundle(initial,deltax,deltay,deltaz,delta,FF):
     """Same as magFieldBundle, but every vector is a unit vector.
 
     """
@@ -39,7 +39,7 @@ def unitFieldBundle(initial,deltax,deltay,deltaz,delta,TB):
     output = []
     c = 0
     for p in pts:
-        vect = magAtPoint(TB,p)
+        vect = FF(p)
         mag = np.linalg.norm(vect)
         if mag ==0:
             output.append(np.array([0,0,0]))#zero vector normalizes to 0
@@ -163,8 +163,23 @@ class threeDeeCurve:
         df = dc.toFunction()
         L=np.linspace(interval[0],interval[1],samples)
         return [sf(L),df(L)]
-        
 
+    def makeFieldFunction(self,interval,samples=500):
+        """Returns a function that takes as input a triple 
+        representing a point in 3-space and returns a triple 
+        that represents the magnetic field created by a unit 
+        current passing through the wire segment given
+        by the interval. A samples argument can be given to 
+        improve accuracy.
+
+        The function is normalized so that it can be superposed 
+        with other field functions.
+        
+        """
+        deltaT = 1.0*(interval[0]-interval[1])/samples
+        stb=self.tangentBundle(interval,samples=samples)
+        return lambda p : magAtPoint(stb,p,factor=deltaT)
+        
 def magAtPoint(bundle,point,factor=0.1):
     """Given the tangent bundle of a curve, this function computes the
      magnetic field at the point, or more specifically, does a Riemann
@@ -176,8 +191,8 @@ def magAtPoint(bundle,point,factor=0.1):
      to IK_m.
     
     So far the computation is dimensionless. The factor argument, can
-    be used to to specify constants. It should also incorporate the Delta
-    t factor in a Riemann sum with equal subdivisions.
+    be used to to specify constants. It should also incorporate the
+    Delta t factor in a Riemann sum with equal subdivisions.
 
     """
     
@@ -210,7 +225,7 @@ def drawBundle(bun,drawArrows=True):
         G=G+i
     return G
 
-def plotMagField(tanbundle,xint,yint,zint,stepsize=1,unit=False,drawArrows=True):
+def plotMagField(fieldFunc,xint,yint,zint,stepsize=1,unit=False,drawArrows=True):
     """Returns a Sage 3D graphics object representing the magnetic field
     made by the wire with the specified tangent bundle.
 
@@ -223,7 +238,7 @@ def plotMagField(tanbundle,xint,yint,zint,stepsize=1,unit=False,drawArrows=True)
         'delta' : stepsize,
     }
     pts = cubePoints(**cubeinput)
-    cubeinput['TB']=tanbundle
+    cubeinput['FF']=fieldFunc
     if unit:
         mfb = unitFieldBundle(**cubeinput)
     else:
@@ -238,7 +253,7 @@ def normalize(v):
     else:
         return (1/mag)*v
 
-def traceFieldLine(tanbundle,initial,stepsize=0.1,steps=100,lcolor='green'):
+def traceFieldLine(fieldFunc,initial,stepsize=0.1,steps=100,lcolor='green'):
     """Given a tangent bundle, traces a portion of a field line starting
     at the initial point. """
     
@@ -246,8 +261,13 @@ def traceFieldLine(tanbundle,initial,stepsize=0.1,steps=100,lcolor='green'):
     path = [initial]
     cur = initial
     for i in range(steps):
-        vect = magAtPoint(tanbundle,cur)
+        vect = fieldFunc(cur)
         vect = stepsize*normalize(vect)
         cur = cur+vect
         path.append(cur)
     return line3d(path,color=lcolor)
+
+def superpose(f1,f2):
+    """Supperposes the two magnetic fieldFunctions.
+    """
+    return lambda p : f1(p)+f2(p)
